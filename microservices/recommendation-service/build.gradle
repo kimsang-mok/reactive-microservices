@@ -13,13 +13,33 @@ java {
 	}
 }
 
+ext {
+	lombokVersion = "1.18.30"
+	mapstructVersion = "1.5.5.Final"
+}
+
 repositories {
 	mavenCentral()
 }
 
 dependencies {
+	implementation project(":api")
+	implementation project(":util")
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	implementation 'org.springframework.boot:spring-boot-starter-webflux'
+	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+
+	// lombok dependencies
+	compileOnly "org.projectlombok:lombok:${lombokVersion}"
+	annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+
+	// mapstruct dependencies
+	implementation "org.mapstruct:mapstruct:${mapstructVersion}"
+
+	compileOnly "org.mapstruct:mapstruct:${mapstructVersion}"
+	annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
+	testAnnotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
+
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'io.projectreactor:reactor-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
