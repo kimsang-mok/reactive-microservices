@@ -1,15 +1,17 @@
 package com.kimsang.microservices.composite.product.services;
 
-import com.kimsang.api.composite.ProductAggregate;
-import com.kimsang.api.composite.ProductCompositeService;
-import com.kimsang.api.composite.ServiceAddresses;
+import com.kimsang.api.composite.product.*;
 import com.kimsang.api.core.product.Product;
+import com.kimsang.api.core.recommendation.Recommendation;
+import com.kimsang.api.core.review.Review;
 import com.kimsang.api.exceptions.NotFoundException;
 import com.kimsang.util.http.ServiceUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 public class ProductCompositeServiceImpl implements ProductCompositeService {
@@ -30,7 +32,7 @@ public class ProductCompositeServiceImpl implements ProductCompositeService {
 
   @Override
   public String sayHello() {
-    LOG.error("Hello world");
+    LOG.debug("Hello world");
     return "Hello";
   }
 
@@ -41,6 +43,22 @@ public class ProductCompositeServiceImpl implements ProductCompositeService {
 
       Product product = new Product(body.getProductId(), body.getName(), body.getWeight(), null);
       integration.createProduct(product);
+
+      if (body.getRecommendations() != null) {
+        body.getRecommendations().forEach(r -> {
+          Recommendation recommendation = new Recommendation(body.getProductId(), r.getRecommendationId(),
+              r.getAuthor(), r.getRate(), r.getContent(), null);
+          integration.createRecommendation(recommendation);
+        });
+      }
+
+      if (body.getReviews() != null) {
+        body.getReviews().forEach(r -> {
+          Review review = new Review(body.getProductId(), r.getReviewId(), r.getAuthor(), r.getSubject(),
+              r.getContent(), null);
+          integration.createReview(review);
+        });
+      }
 
       LOG.debug("createCompositeProduct: composite entities created for productId: {}", body.getProductId());
     } catch (RuntimeException re) {
@@ -59,14 +77,30 @@ public class ProductCompositeServiceImpl implements ProductCompositeService {
       throw new NotFoundException("No product found for productId: " + productId);
     }
 
+    List<Recommendation> recommendations = integration.getRecommendations(productId);
+
+    List<Review> reviews = integration.getReviews(productId);
 
     LOG.debug("getCompositeProduct: aggregate entity found for productId: {}", productId);
 
-    return createProductAggregate(product, serviceUtil.getServiceAddress());
+    return createProductAggregate(product, recommendations, reviews, serviceUtil.getServiceAddress());
+  }
+
+  @Override
+  public void deleteProduct(int productId) {
+    LOG.debug("deleteCompositeProduct: Deletes a product aggregate for productId: {}", productId);
+
+    integration.deleteProduct(productId);
+
+    integration.deleteRecommendations(productId);
+
+    integration.deleteReviews(productId);
   }
 
   private ProductAggregate createProductAggregate(
       Product product,
+      List<Recommendation> recommendations,
+      List<Review> reviews,
       String serviceAddress) {
 
     // 1. Setup product info
@@ -74,11 +108,26 @@ public class ProductCompositeServiceImpl implements ProductCompositeService {
     String name = product.getName();
     int weight = product.getWeight();
 
+    // 2. Copy summary recommendation info, if available
+    List<RecommendationSummary> recommendationSummaries = (recommendations == null) ? null :
+        recommendations.stream().map(r -> new RecommendationSummary(r.getRecommendationId(), r.getAuthor(),
+            r.getRate(), r.getContent())).toList();
+
+    // 3. Copy summary review info, if available
+    List<ReviewSummary> reviewSummaries = (reviews == null) ? null :
+        reviews.stream()
+            .map(r -> new ReviewSummary(r.getReviewId(), r.getAuthor(), r.getSubject(), r.getContent()))
+            .toList();
+
 
     // 4. Create info regarding the involved microservices addresses
     String productAddress = product.getServiceAddress();
-    ServiceAddresses serviceAddresses = new ServiceAddresses(serviceAddress, productAddress);
+    String reviewAddress = (reviews != null && !reviews.isEmpty()) ? reviews.getFirst().getServiceAddress() : "";
+    String recommendationAddress = (recommendations != null && !recommendations.isEmpty()) ?
+        recommendations.getFirst().getServiceAddress() : "";
+    ServiceAddresses serviceAddresses = new ServiceAddresses(serviceAddress, productAddress, reviewAddress,
+        recommendationAddress);
 
-    return new ProductAggregate(productId, name, weight, serviceAddresses);
+    return new ProductAggregate(productId, name, weight, recommendationSummaries, reviewSummaries, serviceAddresses);
   }
 }

@@ -1,15 +1,16 @@
 package com.kimsang.microservices.core.review.services;
 
+import java.util.List;
+
 import com.kimsang.api.core.review.Review;
 import com.kimsang.microservices.core.review.persistence.ReviewEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
 
-import java.util.List;
-
-@Mapper(componentModel =  "spring")
+@Mapper(componentModel = "spring")
 public interface ReviewMapper {
+
   @Mappings({
       @Mapping(target = "serviceAddress", ignore = true)
   })

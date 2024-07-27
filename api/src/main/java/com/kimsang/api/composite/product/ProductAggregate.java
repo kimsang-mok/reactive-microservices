@@ -1,8 +1,7 @@
-package com.kimsang.api.composite;
+package com.kimsang.api.composite.product;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.util.List;
 

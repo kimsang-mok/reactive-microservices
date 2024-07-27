@@ -1,11 +1,22 @@
+server:
+  port: 7003
+  error:
+    include-message: always
+
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/review-db
+    url: jdbc:mysql://localhost:3306/reviewdb
     username: root
     password: kimsangkafka
     driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
       initialization-fail-timeout: 60000
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
 
 logging:
   level:
@@ -21,6 +32,15 @@ spring:
       on-profile: docker
   datasource:
     url: jdbc:mysql://mysql/review-db
+    username: root
+    password: rootpwd
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
 
 server:
   port: 8080

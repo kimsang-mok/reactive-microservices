@@ -7,6 +7,12 @@ app:
   product-service:
     host: localhost
     port: 7001
+  recommendation-service:
+    host: localhost
+    port: 7002
+  review-service:
+    host: localhost
+    port: 7003
 
 logging:
   level:
@@ -23,4 +29,10 @@ server:
 app:
   product-service:
     host: product
+    port: 8080
+  recommendation-service:
+    host: recommendation
+    port: 8080
+  review-service:
+    host: review
     port: 8080
