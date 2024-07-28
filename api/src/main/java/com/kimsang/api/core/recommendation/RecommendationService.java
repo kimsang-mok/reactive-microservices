@@ -1,6 +1,8 @@
 package com.kimsang.api.core.recommendation;
 
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.util.List;
 
@@ -10,16 +12,16 @@ public interface RecommendationService {
       consumes = "application/json",
       produces = "application/json"
   )
-  Recommendation createRecommendation(@RequestBody Recommendation body);
+  Mono<Recommendation> createRecommendation(@RequestBody Recommendation body);
 
   @GetMapping(
       value = "/recommendation",
       produces = "application/json"
   )
-  List<Recommendation> getRecommendations(
+  Flux<Recommendation> getRecommendations(
       @RequestParam(value = "productId", required = true) int productId
   );
 
   @DeleteMapping(value = "/recommendation")
-  void deleteRecommendations(@RequestParam(value = "productId", required = true) int productId);
+  Mono<Void> deleteRecommendations(@RequestParam(value = "productId", required = true) int productId);
 }

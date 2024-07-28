@@ -1,4 +1,5 @@
 package com.kimsang.api.core.product;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;

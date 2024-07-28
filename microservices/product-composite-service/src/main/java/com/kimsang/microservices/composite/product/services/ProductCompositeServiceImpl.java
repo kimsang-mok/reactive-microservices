@@ -10,7 +10,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Mono;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -37,20 +39,46 @@ public class ProductCompositeServiceImpl implements ProductCompositeService {
   }
 
   @Override
-  public void createProduct(ProductAggregate body) {
+  public Mono<Void> createProduct(ProductAggregate body) {
     try {
+      List<Mono> monoList = new ArrayList<>();
+
       LOG.debug("createCompositeProduct: creates a new composite entity for productId: {}", body.getProductId());
 
       Product product = new Product(body.getProductId(), body.getName(), body.getWeight(), null);
-      integration.createProduct(product);
+      monoList.add(integration.createProduct(product));
 
       if (body.getRecommendations() != null) {
         body.getRecommendations().forEach(r -> {
           Recommendation recommendation = new Recommendation(body.getProductId(), r.getRecommendationId(),
               r.getAuthor(), r.getRate(), r.getContent(), null);
-          integration.createRecommendation(recommendation);
+          monoList.add(integration.createRecommendation(recommendation));
         });
       }
+
+      if (body.getReviews() != null) {
+        body.getReviews().forEach(r -> {
+          Review review = new Review(body.getProductId(), r.getReviewId(), r.getAuthor(), r.getSubject(),
+              r.getContent(), null);
+          monoList.add(integration.createProduct(product))
+        });
+      }
+      LOG.debug("createCompositeProduct: composite entities created for productId: {}", body.getProductId());
+
+      return Mono.zip(r -> "", monoList.toArray(new Mono[0]))
+          .doOnError(ex -> LOG.warn("createCompositeProduct failed: {}", ex.toString()))
+          .then();
+
+    } catch (RuntimeException re) {
+      LOG.warn("createCompositeProduct failed: {}", re.toString());
+      throw re;
+    }
+
+    try {
+
+      Product product = new Product(body.getProductId(), body.getName(), body.getWeight(), null);
+      integration.createProduct(product);
+
 
       if (body.getReviews() != null) {
         body.getReviews().forEach(r -> {
