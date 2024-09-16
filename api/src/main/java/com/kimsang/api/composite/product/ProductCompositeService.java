@@ -9,7 +9,7 @@ public interface ProductCompositeService {
       value = "/product-composite",
       consumes = "application/json"
   )
-  void createProduct(@RequestBody ProductAggregate body);
+  Mono<Void> createProduct(@RequestBody ProductAggregate body);
 
   @GetMapping(
       value = "/product-composite/{productId}",
@@ -18,7 +18,7 @@ public interface ProductCompositeService {
   Mono<ProductAggregate> getProduct(@PathVariable int productId);
 
   @DeleteMapping(value = "/product-composite/{productId}")
-  void deleteProduct(@PathVariable int productId);
+  Mono<Void> deleteProduct(@PathVariable int productId);
 
   @GetMapping(
       value = "/hello",
