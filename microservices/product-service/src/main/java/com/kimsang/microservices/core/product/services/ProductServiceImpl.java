@@ -44,13 +44,13 @@ public class ProductServiceImpl implements ProductService {
     }
 
     ProductEntity entity = mapper.apiToEntity(body);
+
     return repository.save(entity)
         .log(LOG.getName(), FINE)
         .onErrorMap(
             DuplicateKeyException.class,
             ex -> new InvalidInputException("Duplicate key, Product Id: " + body.getProductId()))
         .map(mapper::entityToApi);
-
   }
 
   @Override
