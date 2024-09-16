@@ -16,6 +16,7 @@ java {
 ext {
     lombokVersion = "1.18.30"
     mapstructVersion = "1.5.5.Final"
+    springCloudVersion = "2023.0.0"
 }
 
 repositories {
@@ -27,6 +28,8 @@ dependencies {
     implementation project(":util")
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
+    implementation 'org.springframework.cloud:spring-cloud-starter-stream-rabbit'
+    implementation 'org.springframework.cloud:spring-cloud-starter-stream-kafka'
 
     // jpa dependencies
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
@@ -46,6 +49,13 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'io.projectreactor:reactor-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+    }
 }
 
 tasks.named('test') {
