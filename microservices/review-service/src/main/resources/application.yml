@@ -18,6 +18,43 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
 
+  cloud:
+    function:
+      definition: messageProcessor
+    stream:
+      default-binder: rabbit
+      bindings:
+        messageProcessor-in-0:
+          destination: recommendations
+          group: recommendationsGroup
+          content-type: application/json
+          consumer:
+            max-attempts: 3
+            back-off-initial-interval: 500
+            back-off-multiplier: 2.0
+            back-off-max-interval: 1000
+
+      rabbit:
+        bindings:
+          messageProcessor-in-0.consumer:
+            auto-bind-dlq: true
+            republish-to-dlq: true
+
+      kafka:
+        bindings:
+          messageProcessor-in-0.consumer:
+            enable-dlq: true
+
+        binder:
+          brokers: 127.0.0.1:9092
+
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+    username: guest
+    password: guest
+
+
 logging:
   level:
     root: INFO
@@ -41,6 +78,10 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
+
+spring.rabbitmq.host: rabbitmq
+
+spring.cloud.stream.kafka.binder.brokers: kafka
 
 server:
   port: 8080

@@ -14,10 +14,35 @@ app:
     host: localhost
     port: 7003
 
+
 logging:
   level:
     root: INFO
     com.kimsang: DEBUG
+
+spring:
+  cloud:
+    stream:
+      default-binder: rabbit
+
+      bindings:
+        products-out-0:
+          destination: products
+        recommendations-out-0:
+          destination: recommendations
+        reviews-out-0:
+          destination: reviews
+
+
+      kafka:
+        binder:
+          brokers: 127.0.0.1:9092
+
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+    username: guest
+    password: guest
 
 ---
 spring:
@@ -36,3 +61,8 @@ app:
   review-service:
     host: review
     port: 8080
+
+
+spring.rabbitmq.host: rabbitmq
+
+spring.cloud.stream.kafka.binder.brokers: kafka
