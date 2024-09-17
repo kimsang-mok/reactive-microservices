@@ -38,7 +38,7 @@ public class ProductCompositeServiceImpl implements ProductCompositeService {
   @Override
   public String sayHello() {
     LOG.debug("Hello world");
-    return "Hello";
+    return "Hello There 2";
   }
 
   @Override
@@ -63,7 +63,7 @@ public class ProductCompositeServiceImpl implements ProductCompositeService {
         body.getReviews().forEach(r -> {
           Review review = new Review(body.getProductId(), r.getReviewId(), r.getAuthor(), r.getSubject(),
               r.getContent(), null);
-          monoList.add(integration.createProduct(product));
+          monoList.add(integration.createReview(review));
         });
       }
       LOG.debug("createCompositeProduct: composite entities created for productId: {}", body.getProductId());

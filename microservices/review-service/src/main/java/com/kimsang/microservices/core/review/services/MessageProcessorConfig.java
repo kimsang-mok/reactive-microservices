@@ -33,6 +33,7 @@ public class MessageProcessorConfig {
         case CREATE:
           Review review = event.getData();
           LOG.info("Create review with ID: {}/{}", review.getProductId(), review.getReviewId());
+          reviewService.createReview(review).block();
           break;
 
         case DELETE:

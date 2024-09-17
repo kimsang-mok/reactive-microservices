@@ -17,8 +17,8 @@ spring:
       default-binder: rabbit
       bindings:
         messageProcessor-in-0:
-          destination: recommendations
-          group: recommendationsGroup
+          destination: products
+          group: productsGroup
           content-type: application/json
           consumer:
             max-attempts: 3

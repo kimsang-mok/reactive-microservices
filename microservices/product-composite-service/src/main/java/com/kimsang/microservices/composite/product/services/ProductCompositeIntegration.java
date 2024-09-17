@@ -69,9 +69,9 @@ public class ProductCompositeIntegration implements ProductService, Recommendati
     this.mapper = mapper;
     this.streamBridge = streamBridge;
 
-    productServiceUrl = "http://" + productServiceHost + ":" + productServicePort + "/product";
-    recommendationServiceUrl = "http://" + recommendationServiceHost + ":" + recommendationServicePort + "/recommendation";
-    reviewServiceUrl = "http://" + reviewServiceHost + ":" + reviewServicePort + "/review";
+    productServiceUrl = "http://" + productServiceHost + ":" + productServicePort;
+    recommendationServiceUrl = "http://" + recommendationServiceHost + ":" + recommendationServicePort;
+    reviewServiceUrl = "http://" + reviewServiceHost + ":" + reviewServicePort;
     this.publishEventScheduler = publishEventScheduler;
   }
 
@@ -86,6 +86,7 @@ public class ProductCompositeIntegration implements ProductService, Recommendati
   @Override
   public Mono<Product> getProduct(int productId) {
     String url = productServiceUrl + "/product/" + productId;
+    LOG.debug("This is he url: " + url);
 
     LOG.debug("Will call the getProduct API on URL: {}", url);
 
@@ -136,7 +137,7 @@ public class ProductCompositeIntegration implements ProductService, Recommendati
   @Override
   public Flux<Review> getReviews(int productId) {
 
-    String url = reviewServiceUrl + "/review?productId" + productId;
+    String url = reviewServiceUrl + "/review?productId=" + productId;
 
     LOG.debug("Will call the getReviews API on URL: {}", url);
 

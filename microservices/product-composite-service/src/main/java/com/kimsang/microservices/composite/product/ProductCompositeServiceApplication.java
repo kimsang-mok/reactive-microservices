@@ -1,6 +1,5 @@
 package com.kimsang.microservices.composite.product;
 
-import com.kimsang.microservices.composite.product.services.ProductCompositeIntegration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
