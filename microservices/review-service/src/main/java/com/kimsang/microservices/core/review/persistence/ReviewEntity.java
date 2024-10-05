@@ -10,10 +10,10 @@ import lombok.NoArgsConstructor;
     "reviewId")})
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class ReviewEntity {
 
-  @Id @GeneratedValue
+  @Id
+  @GeneratedValue
   private int id;
 
   @Version
@@ -24,4 +24,12 @@ public class ReviewEntity {
   private String author;
   private String subject;
   private String content;
+
+  public ReviewEntity(int productId, int reviewId, String author, String subject, String content) {
+    this.productId = productId;
+    this.reviewId = reviewId;
+    this.author = author;
+    this.subject = subject;
+    this.content = content;
+  }
 }
