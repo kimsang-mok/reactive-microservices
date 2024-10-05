@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Configuration;
 
 import java.util.function.Consumer;
 
+// annotate the class with @Configuration, telling spring to look for Beans
 @Configuration
 public class MessageProcessorConfig {
   private static final Logger LOG = LoggerFactory.getLogger(MessageProcessorConfig.class);
@@ -41,6 +42,7 @@ public class MessageProcessorConfig {
 
           // use block() method to propagate exceptions back to the messaging system
           productService.deleteProduct(productId).block();
+          break;
 
         default:
           String errorMessage = "Incorrect event type: " + event.getEventType();

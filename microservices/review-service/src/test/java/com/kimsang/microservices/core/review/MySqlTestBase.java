@@ -5,7 +5,8 @@ import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.MySQLContainer;
 
 public abstract class MySqlTestBase {
-  private static MySQLContainer<?> database = new MySQLContainer<>("mysql:5.7.32");
+  private static MySQLContainer<?> database =
+      new MySQLContainer<>("mysql:8.0.33");
 
   static {
     database.start();
