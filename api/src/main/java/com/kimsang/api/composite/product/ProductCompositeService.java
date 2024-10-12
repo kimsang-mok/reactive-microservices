@@ -1,10 +1,12 @@
 package com.kimsang.api.composite.product;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
 public interface ProductCompositeService {
 
+  @ResponseStatus(HttpStatus.ACCEPTED)
   @PostMapping(
       value = "/product-composite",
       consumes = "application/json"
@@ -17,6 +19,7 @@ public interface ProductCompositeService {
   )
   Mono<ProductAggregate> getProduct(@PathVariable int productId);
 
+  @ResponseStatus(HttpStatus.ACCEPTED)
   @DeleteMapping(value = "/product-composite/{productId}")
   Mono<Void> deleteProduct(@PathVariable int productId);
 
