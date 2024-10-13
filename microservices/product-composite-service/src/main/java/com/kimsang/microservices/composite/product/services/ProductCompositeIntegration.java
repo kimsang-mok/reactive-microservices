@@ -7,6 +7,7 @@ import static com.kimsang.api.event.Event.Type.CREATE;
 import static com.kimsang.api.event.Event.Type.DELETE;
 
 
+import org.springframework.boot.actuate.health.Health;
 import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.messaging.Message;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -188,6 +189,32 @@ public class ProductCompositeIntegration implements ProductService, Recommendati
     } catch (IOException ioex) {
       return ex.getMessage();
     }
+  }
+
+
+  public Mono<Health> getProductHealth() {
+    return getHealth(productServiceUrl);
+  }
+
+  public Mono<Health> getRecommendationHealth() {
+    return getHealth(recommendationServiceUrl);
+  }
+
+  public Mono<Health> getReviewHealth() {
+    return getHealth(reviewServiceUrl);
+  }
+
+  private Mono<Health> getHealth(String url) {
+    url += "/actuator/health";
+    LOG.debug("Will call the Health API on URL: {}", url);
+    return webClient.get().uri(url).retrieve().bodyToMono(String.class)
+        /**
+         * If there's an error (e.g. the service is down or the request fails), this creates health object that
+         * indicates the service is "down" and includes the exception(ex) that caused the failure
+         */
+        .map(s -> new Health.Builder().up().build())
+        .onErrorResume(ex -> Mono.just(new Health.Builder().down(ex).build()))
+        .log(LOG.getName(), FINE);
   }
 }
 

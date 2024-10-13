@@ -28,11 +28,16 @@ spring:
       bindings:
         products-out-0:
           destination: products
+          producer:
+            required-groups: auditGroup
         recommendations-out-0:
           destination: recommendations
+          producer:
+            required-groups: auditGroup
         reviews-out-0:
           destination: reviews
-
+          producer:
+            required-groups: auditGroup
 
       kafka:
         binder:
@@ -44,6 +49,9 @@ spring:
     username: guest
     password: guest
 
+management.endpoint.health.show-details: "ALWAYS"
+management.endpoints.web.exposure.include: "*"
+debug: true
 ---
 spring:
   config:
@@ -66,3 +74,40 @@ app:
 spring.rabbitmq.host: rabbitmq
 
 spring.cloud.stream.kafka.binder.brokers: kafka
+
+---
+spring.config.activate.on-profile: streaming_partitioned
+
+spring:
+  cloud:
+    stream:
+      bindings:
+        products-out-0.producer:
+          partition-key-expression: headers['partitionKey']
+          partition-count: 2
+
+        recommendations-out-0.producer:
+          partition-key-expression: headers['partitionKey']
+          partition-count: 2
+
+        reviews-out-0.producer:
+          partition-key-expression: headers['partitionKey']
+          partition-count: 2
+
+
+---
+spring.config.activate.on-profile: kafka
+
+management.health.rabbit.enabled: false
+spring:
+  cloud:
+    stream:
+      default-binder: kafka
+      kafka:
+        binder:
+          replication-factor: 1
+
+  kafka:
+    bootstrap-servers: kafka:9092
+
+
