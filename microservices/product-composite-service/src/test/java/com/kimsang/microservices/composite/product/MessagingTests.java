@@ -38,7 +38,7 @@ import static java.util.Collections.singletonList;
 
 @SpringBootTest(
     webEnvironment = RANDOM_PORT,
-    properties = {"spring.main.allow-bean-definition-overriding=true"}
+    properties = {"spring.main.allow-bean-definition-overriding=true", "eureka.client.enabled=false"}
 )
 @Import({TestChannelBinderConfiguration.class})
 public class MessagingTests {

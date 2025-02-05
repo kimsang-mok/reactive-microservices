@@ -3,6 +3,21 @@ server:
   error:
     include-message: always
 
+
+spring.application.name: product
+
+app.eureka-server: localhost
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://${app.eureka-server}:8761/eureka/
+    initialInstanceInfoReplicationIntervalSeconds: 5
+    registryFetchIntervalSeconds: 5
+  instance:
+    leaseRenewalIntervalInSeconds: 5
+    leaseExpirationDurationInSeconds: 5
+
 spring:
   data:
     mongodb:
@@ -69,5 +84,7 @@ spring:
       kafka:
         binder:
           brokers: kafka
+
+app.eureka-server: eureka
 
 server.port: 8080

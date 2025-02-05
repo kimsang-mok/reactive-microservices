@@ -5,6 +5,18 @@ server:
 
 spring.application.name: product-composite
 
+app.eureka-server: localhost
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://${app.eureka-server}:8761/eureka/
+    initialInstanceInfoReplicationIntervalSeconds: 5
+    registryFetchIntervalSeconds: 5
+  instance:
+    leaseRenewalIntervalInSeconds: 5
+    leaseExpirationDurationInSeconds: 5
+
 logging:
   level:
     root: INFO
@@ -49,6 +61,8 @@ spring:
       on-profile: docker
 server:
   port: 8080
+
+app.eureka-server: eureka
 
 spring.rabbitmq.host: rabbitmq
 

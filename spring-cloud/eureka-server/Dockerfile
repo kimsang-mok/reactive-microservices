@@ -3,7 +3,7 @@ FROM eclipse-temurin:21-jdk as builder
 WORKDIR /workspace
 
 # Copy the build artifacts to the container
-COPY build/libs/*.jar app.jar
+ADD build/libs/*.jar app.jar
 
 # Extract the layers from the JAR file
 RUN java -Djarmode=layertools -jar app.jar extract
@@ -18,10 +18,8 @@ COPY --from=builder /workspace/spring-boot-loader/ ./
 COPY --from=builder /workspace/snapshot-dependencies/ ./
 COPY --from=builder /workspace/application/ ./
 
-COPY src/main/resources/application.yml ./config/
-
 # Expose the application port
-EXPOSE 8080
+EXPOSE 8761
 
 # Set the entry point to launch the application
 ENTRYPOINT ["java", "org.springframework.boot.loader.launch.JarLauncher"]

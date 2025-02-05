@@ -3,6 +3,7 @@ services:
     build: microservices/product-service
     mem_limit: 512m
     environment:
+#      - SPRING_APPLICATION_NAME=product
       - SPRING_PROFILES_ACTIVE=docker
     depends_on:
       mongodb:
@@ -14,6 +15,7 @@ services:
     build: microservices/recommendation-service
     mem_limit: 512m
     environment:
+#      - SPRING_APPLICATION_NAME=recommendation
       - SPRING_PROFILES_ACTIVE=docker
     depends_on:
       mongodb:
@@ -25,6 +27,7 @@ services:
     build: microservices/review-service
     mem_limit: 512m
     environment:
+#      - SPRING_APPLICATION_NAME=review
       - SPRING_PROFILES_ACTIVE=docker
     depends_on:
       mysql:
@@ -38,6 +41,7 @@ services:
     ports:
       - "8080:8080"
     environment:
+#      - SPRING_APPLICATION_NAME=product-composite
       - SPRING_PROFILES_ACTIVE=docker
     depends_on:
       rabbitmq:

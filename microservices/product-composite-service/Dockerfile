@@ -18,6 +18,8 @@ COPY --from=builder /workspace/spring-boot-loader/ ./
 COPY --from=builder /workspace/snapshot-dependencies/ ./
 COPY --from=builder /workspace/application/ ./
 
+COPY src/main/resources/application.yml ./config/
+
 # Expose the application port
 EXPOSE 8080
 
