@@ -1,1 +1,3 @@
 spring init --boot-version=3.3.0 --build=gradle --java-version=21 --packaging=jar --name=eureka-server --package-name=com.kimsang.springcloud.eurekaserver --groupId=com.kimsang.springcloud.eurekaserver --version=1.0.0-SNAPSHOT --type=gradle-project eureka-server
+
+spring init --boot-version=3.3.0 --build=gradle --java-version=21 --packaging=jar --name=gateway --package-name=com.kimsang.springcloud.gateway --groupId=com.kimsang.springcloud.gateway --version=1.0.0-SNAPSHOT --type=gradle-project gateway

@@ -3,7 +3,6 @@ services:
     build: microservices/product-service
     mem_limit: 512m
     environment:
-#      - SPRING_APPLICATION_NAME=product
       - SPRING_PROFILES_ACTIVE=docker
     depends_on:
       mongodb:
@@ -15,7 +14,6 @@ services:
     build: microservices/recommendation-service
     mem_limit: 512m
     environment:
-#      - SPRING_APPLICATION_NAME=recommendation
       - SPRING_PROFILES_ACTIVE=docker
     depends_on:
       mongodb:
@@ -92,3 +90,10 @@ services:
     mem_limit: 512m
     ports:
       - "8761:8761"
+  gateway:
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    build: spring-cloud/gateway
+    mem_limit: 512m
+    ports:
+      - "8080:8080"
