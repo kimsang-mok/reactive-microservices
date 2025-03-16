@@ -5,13 +5,13 @@ eureka:
   instance:
     hostname: localhost
   client:
-    register-with-eureka: false
-    fetch-registry: false
-    service-url:
-      default-zone: http://${eureka.instance.hostname}:${server.port}/eureka/
+    registerWithEureka: false
+    fetchRegistry: false
+    serviceUrl:
+      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
   # from: https://github.com/spring-cloud-samples/eureka/blob/master/src/main/resources/application.yml
   server:
-    wait-time-in-ms-when-sync-empty: 0
+    waitTimeInMsWhenSyncEmpty: 0
     response-cache-update-interval-ms: 5000
 
 management.endpoints.web.exposure.include: "*"
