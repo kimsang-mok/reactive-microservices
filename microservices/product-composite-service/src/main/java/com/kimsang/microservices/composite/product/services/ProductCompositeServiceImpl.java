@@ -81,6 +81,11 @@ public class ProductCompositeServiceImpl implements ProductCompositeService {
   @Override
   public Mono<ProductAggregate> getProduct(int productId) {
 
+    if (productId == -1) {
+      LOG.warn("Invalid productId: {}", productId);
+      return Mono.error(new RuntimeException("No product found"));
+    }
+
     LOG.info("Will get composite product info for product.id: {}", productId);
     return Mono.zip(
             values -> createProductAggregate((Product) values[0], (List<Recommendation>) values[1],

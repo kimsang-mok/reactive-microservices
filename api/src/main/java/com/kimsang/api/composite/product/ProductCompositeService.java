@@ -24,7 +24,7 @@ public interface ProductCompositeService {
   Mono<Void> deleteProduct(@PathVariable int productId);
 
   @GetMapping(
-      value = "/hello",
+      value = "/product-composite/hello",
       produces = "application/json"
   )
   String sayHello();
