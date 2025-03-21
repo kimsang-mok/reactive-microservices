@@ -1,7 +1,43 @@
+springdoc:
+  swagger-ui.path: /openapi/swagger-ui.html
+  api-docs.path: /openapi/v1/api-docs
+  packagesToScan: com.kimsang.microservices.composite.product
+  pathsToMatch: /**
+  cache.disabled: true
+
+  swagger-ui:
+    oauth2-redirect-url: https://localhost:8443/webjars/swagger-ui/oauth2-redirect.html
+    oauth:
+      clientId: writer
+      clientSecret: secret
+      useBasicAuthenticationWithAccessCodeGrant: true
+
+  oAuthFlow:
+    authorizationUrl: https://localhost:8443/oauth2/authorize
+    tokenUrl: https://localhost:8443/oauth2/token
+
+api:
+
+  common:
+    version: 1.0.0
+    title: Sample API
+    description: Description of the API...
+    termsOfService: MY TERMS OF SERVICE
+    license: MY LICENSE
+    licenseUrl: MY LICENSE URL
+
+    externalDocDesc: MY WIKI PAGE
+    externalDocUrl: MY WIKI URL
+    contact:
+      name: NAME OF CONTACT
+      url: URL TO CONTACT
+      email: contact@mail.com
+
 server:
   port: 7000
   error:
     include-message: always
+  forward-headers-strategy: framework
 
 spring.application.name: product-composite
 
@@ -9,6 +45,9 @@ app:
   eureka-server: localhost
   eureka-username: u
   eureka-password: p
+  auth-server: localhost
+
+org.springframework.web.server.adapter.HttpWebHandlerAdapter: TRACE
 
 eureka:
   client:
@@ -53,6 +92,11 @@ spring:
     port: 5672
     username: guest
     password: guest
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://${app.auth-server}:9999
 
 management.endpoint.health.show-details: "ALWAYS"
 management.endpoints.web.exposure.include: "*"
@@ -65,7 +109,9 @@ spring:
 server:
   port: 8080
 
-app.eureka-server: eureka
+app:
+  eureka-server: eureka
+  auth-server: auth-server
 
 spring.rabbitmq.host: rabbitmq
 

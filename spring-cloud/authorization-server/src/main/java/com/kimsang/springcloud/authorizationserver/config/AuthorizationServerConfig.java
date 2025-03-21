@@ -19,8 +19,9 @@ import org.springframework.security.oauth2.server.authorization.client.Registere
 import org.springframework.security.oauth2.server.authorization.config.annotation.web.configuration.OAuth2AuthorizationServerConfiguration;
 import org.springframework.security.oauth2.server.authorization.settings.AuthorizationServerSettings;
 import org.springframework.security.oauth2.server.authorization.settings.ClientSettings;
+import org.springframework.security.oauth2.server.authorization.settings.TokenSettings;
 
-import java.util.Set;
+import java.time.Duration;
 import java.util.UUID;
 
 @Configuration(proxyBeanMethods = false)
@@ -29,22 +30,39 @@ public class AuthorizationServerConfig {
 
   @Bean
   public RegisteredClientRepository registeredClientRepository() {
-    RegisteredClient oidcClient = RegisteredClient.withId(UUID.randomUUID().toString())
-        .clientId("oidc-client")
-        .clientSecret("{noop}secret")
+    LOG.info("register OAuth client allowing all grant flows...");
+    RegisteredClient writerClient = RegisteredClient.withId(UUID.randomUUID().toString())
+        .clientId("writer")
+        .clientSecret("{noop}writer-secret")
         .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
         .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
         .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
+        .authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS)
         .redirectUri("http://127.0.0.1:8080/login/oauth2/code/oidc-client")
         .postLogoutRedirectUri("http://127.0.0.1:8080/")
-        .scopes(scopes -> {
-          scopes.add(OidcScopes.OPENID);
-          scopes.add(OidcScopes.PROFILE);
-        })
+        .scope(OidcScopes.OPENID)
+        .scope("product:read")
+        .scope("product:write")
         .clientSettings(ClientSettings.builder().requireAuthorizationConsent(true).build())
+        .tokenSettings(TokenSettings.builder().accessTokenTimeToLive(Duration.ofHours(1)).build())
         .build();
 
-    return new InMemoryRegisteredClientRepository(oidcClient);
+    RegisteredClient readerClient = RegisteredClient.withId(UUID.randomUUID().toString())
+        .clientId("reader")
+        .clientSecret("{noop}reader-secret")
+        .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
+        .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
+        .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
+        .authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS)
+        .redirectUri("http://127.0.0.1:8080/login/oauth2/code/oidc-client")
+        .postLogoutRedirectUri("http://127.0.0.1:8080/")
+        .scope(OidcScopes.OPENID)
+        .scope("product:read")
+        .clientSettings(ClientSettings.builder().requireAuthorizationConsent(true).build())
+        .tokenSettings(TokenSettings.builder().accessTokenTimeToLive(Duration.ofHours(1)).build())
+        .build();
+
+    return new InMemoryRegisteredClientRepository(writerClient, readerClient);
   }
 
   @Bean
@@ -61,6 +79,6 @@ public class AuthorizationServerConfig {
 
   @Bean
   public AuthorizationServerSettings authorizationServerSettings() {
-    return AuthorizationServerSettings.builder().build();
+    return AuthorizationServerSettings.builder().issuer("http://auth-server:9999").build();
   }
 }
