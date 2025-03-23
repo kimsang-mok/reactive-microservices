@@ -29,11 +29,13 @@ import reactor.core.publisher.Mono;
 import java.time.Duration;
 
 
-@SpringBootTest(webEnvironment = RANDOM_PORT, classes = {TestSecurityConfig.class}, properties = {"spring.security" +
-    ".oauth2.resourceserver" +
-    ".jwt" +
-    ".issuer-uri=",
-    "spring.main.allow-bean-definition-overriding=true", "eureka.client.enabled=false"})
+@SpringBootTest(webEnvironment = RANDOM_PORT,
+    classes = {TestSecurityConfig.class},
+    properties = {"spring.security" +
+        ".oauth2.resourceserver" +
+        ".jwt" +
+        ".issuer-uri=",
+        "spring.main.allow-bean-definition-overriding=true", "eureka.client.enabled=false"})
 class ProductCompositeServiceApplicationTests {
 
   private static final int PRODUCT_ID_OK = 1;

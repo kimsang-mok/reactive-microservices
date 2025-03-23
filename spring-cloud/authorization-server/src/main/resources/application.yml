@@ -8,6 +8,7 @@ app:
   eureka-username: u
   eureka-password: p
   eureka-server: localhost
+  issuer-uri: http://localhost:9999
 
 eureka:
   client:
@@ -37,3 +38,4 @@ spring.config.activate.on-profile: docker
 
 app:
   eureka-server: eureka
+  issuer-uri: http://auth-server:9999

@@ -6,7 +6,7 @@ springdoc:
   cache.disabled: true
 
   swagger-ui:
-    oauth2-redirect-url: https://localhost:8443/webjars/swagger-ui/oauth2-redirect.html
+    oauth2-redirect-url: https://localhost:8443/swagger-ui/oauth2-redirect.html
     oauth:
       clientId: writer
       clientSecret: secret
@@ -47,6 +47,8 @@ app:
   eureka-password: p
   auth-server: localhost
 
+
+
 org.springframework.web.server.adapter.HttpWebHandlerAdapter: TRACE
 
 eureka:
@@ -65,6 +67,11 @@ logging:
     com.kimsang: DEBUG
 
 spring:
+  test:
+    context:
+      failure:
+        threshold: 10
+
   cloud:
     stream:
       default-binder: rabbit

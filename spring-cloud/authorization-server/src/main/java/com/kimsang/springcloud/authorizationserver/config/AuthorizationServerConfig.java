@@ -7,6 +7,7 @@ import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
@@ -28,6 +29,9 @@ import java.util.UUID;
 public class AuthorizationServerConfig {
   private static final Logger LOG = LoggerFactory.getLogger(AuthorizationServerConfig.class);
 
+  @Value("${app.issuer-uri}")
+  private String issuerUri;
+
   @Bean
   public RegisteredClientRepository registeredClientRepository() {
     LOG.info("register OAuth client allowing all grant flows...");
@@ -38,8 +42,8 @@ public class AuthorizationServerConfig {
         .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
         .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
         .authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS)
-        .redirectUri("http://127.0.0.1:8080/login/oauth2/code/oidc-client")
-        .postLogoutRedirectUri("http://127.0.0.1:8080/")
+        .redirectUri("https://my.redirect.uri")
+        .redirectUri("https://localhost:8443/swagger-ui/oauth2-redirect.html")
         .scope(OidcScopes.OPENID)
         .scope("product:read")
         .scope("product:write")
@@ -54,8 +58,8 @@ public class AuthorizationServerConfig {
         .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
         .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
         .authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS)
-        .redirectUri("http://127.0.0.1:8080/login/oauth2/code/oidc-client")
-        .postLogoutRedirectUri("http://127.0.0.1:8080/")
+        .redirectUri("https://my.redirect.uri")
+        .redirectUri("https://localhost:8443/swagger-ui/oauth2-redirect.html")
         .scope(OidcScopes.OPENID)
         .scope("product:read")
         .clientSettings(ClientSettings.builder().requireAuthorizationConsent(true).build())
@@ -79,6 +83,6 @@ public class AuthorizationServerConfig {
 
   @Bean
   public AuthorizationServerSettings authorizationServerSettings() {
-    return AuthorizationServerSettings.builder().issuer("http://auth-server:9999").build();
+    return AuthorizationServerSettings.builder().issuer(issuerUri).build();
   }
 }

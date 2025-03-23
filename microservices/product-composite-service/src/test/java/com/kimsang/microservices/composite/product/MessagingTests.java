@@ -12,7 +12,6 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.cloud.stream.binder.test.OutputDestination;
 import org.springframework.cloud.stream.binder.test.TestChannelBinderConfiguration;
@@ -20,7 +19,6 @@ import org.springframework.context.annotation.Import;
 import org.springframework.messaging.Message;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.http.HttpStatus;
-import reactor.core.publisher.Mono;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +36,7 @@ import static java.util.Collections.singletonList;
 
 @SpringBootTest(
     webEnvironment = RANDOM_PORT,
+    classes = {TestSecurityConfig.class},
     properties = {"spring.security.oauth2.resourceserver.jwt.issuer-uri=",
         "spring.main.allow-bean-definition-overriding=true", "eureka.client.enabled=false"}
 )

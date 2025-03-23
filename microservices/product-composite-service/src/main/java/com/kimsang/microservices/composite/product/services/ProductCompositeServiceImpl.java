@@ -99,8 +99,10 @@ public class ProductCompositeServiceImpl implements ProductCompositeService {
     return Mono.zip(
             values -> createProductAggregate(
                 (SecurityContext) values[0],
-                (Product) values[1], (List<Recommendation>) values[2],
+                (Product) values[1],
+                (List<Recommendation>) values[2],
                 (List<Review>) values[3], serviceUtil.getServiceAddress()),
+            getSecurityContextMono(),
             integration.getProduct(productId),
             integration.getRecommendations(productId).collectList(),
             integration.getReviews(productId).collectList()

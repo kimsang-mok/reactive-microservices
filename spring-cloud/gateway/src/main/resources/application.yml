@@ -32,10 +32,35 @@ spring.cloud.gateway.routes:
     predicates:
       - Path=/product-composite/**
 
+  - id: oauth2-server
+    uri: lb://auth-server
+    predicates:
+      - Path=/oauth2/**
+
+  - id: oauth2-login
+    uri: lb://auth-server
+    predicates:
+      - Path=/login/**
+
+  - id: oauth2-error
+    uri: lb://auth-server
+    predicates:
+      - Path=/error/**
+
   - id: product-composite-swagger-ui
     uri: lb://product-composite
     predicates:
       - Path=/openapi/**
+
+  - id: product-composite-swagger-ui-webjars
+    uri: lb://product-composite
+    predicates:
+      - Path=/webjars/**
+
+  - id: product-composite-swagger-ui-static
+    uri: lb://product-composite
+    predicates:
+      - Path=/swagger-ui/**
 
   - id: eureka-api
     uri: http://${app.eureka-server}:8761
