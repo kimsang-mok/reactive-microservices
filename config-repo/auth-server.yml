@@ -1,0 +1,24 @@
+server:
+  port: 9999
+  forward-headers-strategy: framework
+
+app:
+  issuer-uri: http://localhost:9999
+
+logging:
+  level:
+    root: INFO
+management:
+  endpoint:
+    health:
+      show-details: "ALWAYS"
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+---
+spring.config.activate.on-profile: docker
+
+app:
+  issuer-uri: http://auth-server:9999
