@@ -14,6 +14,7 @@ app:
   eureka-username: u
   eureka-password: p
   auth-server: localhost
+  config-server: localhost
 
 eureka:
   client:
@@ -81,6 +82,13 @@ spring.cloud.gateway.routes:
     predicates:
       - Path=/eureka/**
 
+  - id: config-server
+    uri: http://${app.config-server}:8888
+    predicates:
+      - Path=/config/**
+    filters:
+      - RewritePath=/config/(?<segment>.*), /$\{segment}
+
   - id: host_route_200
     uri: http://httpstat.us
     predicates:
@@ -125,9 +133,11 @@ spring:
       resourceserver:
         jwt:
           issuer-uri: "http://${app.auth-server}:9999"
+
 ---
 spring.config.activate.on-profile: docker
 
 app:
   eureka-server: eureka
   auth-server: auth-server
+  config-server: config-server
