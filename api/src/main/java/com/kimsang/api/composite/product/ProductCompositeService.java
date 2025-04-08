@@ -1,9 +1,11 @@
 package com.kimsang.api.composite.product;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
+@SecurityRequirement(name = "security_auth")
 public interface ProductCompositeService {
 
   @ResponseStatus(HttpStatus.ACCEPTED)

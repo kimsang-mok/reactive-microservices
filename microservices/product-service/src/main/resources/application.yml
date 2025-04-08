@@ -1,93 +1,21 @@
-server.port: 7001
-server:
-  error:
-    include-message: always
-
-
-spring.application.name: product
-
-app:
-  eureka-server: localhost
-  eureka-username: u
-  eureka-password: p
-
-eureka:
-  client:
-    serviceUrl:
-      defaultZone: http://${app.eureka-username}:${app.eureka-password}@${app.eureka-server}:8761/eureka/
-    initialInstanceInfoReplicationIntervalSeconds: 5
-    registryFetchIntervalSeconds: 5
-  instance:
-    leaseRenewalIntervalInSeconds: 5
-    leaseExpirationDurationInSeconds: 5
-
 spring:
-  data:
-    mongodb:
-      host: 127.0.0.1
-      port: 27017
-      database: product-db
-
+  config:
+    import: "configserver:"
+  application:
+    name: product
   cloud:
-    function:
-      definition: messageProcessor
-    stream:
-      default-binder: rabbit
-      bindings:
-        messageProcessor-in-0:
-          destination: products
-          group: productsGroup
-          content-type: application/json
-          consumer:
-            max-attempts: 3
-            back-off-initial-interval: 500
-            back-off-multiplier: 2.0
-            back-off-max-interval: 1000
-
-      rabbit:
-        bindings:
-          messageProcessor-in-0.consumer:
-            auto-bind-dlq: true
-            republish-to-dlq: true
-
-      kafka:
-        bindings:
-          messageProcessor-in-0.consumer:
-            enable-dlq: true
-
-        binder:
-          brokers: 127.0.0.1:9092
-
-  rabbitmq:
-    host: 127.0.0.1
-    port: 5672
-    username: guest
-    password: guest
-
-logging:
-  level:
-    root: INFO
-    com.kimsang: DEBUG
-    org.springframework.data.mongodb.core.MongoTemplate:
+    config:
+      fail-fast: true
+      retry:
+        initial-interval: 3000
+        multiplier: 1.3
+        max-interval: 10000
+        max-attempts: 20
+      username: ${CONFIG_SERVER_USR}
+      password: ${CONFIG_SERVER_PWD}
 
 ---
 spring:
   config:
     activate:
       on-profile: docker
-  data:
-    mongodb:
-      host: mongodb
-
-  rabbitmq:
-    host: rabbitmq
-
-  cloud:
-    stream:
-      kafka:
-        binder:
-          brokers: kafka
-
-app.eureka-server: eureka
-
-server.port: 8080

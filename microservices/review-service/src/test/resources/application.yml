@@ -1,0 +1,13 @@
+server:
+  error:
+    include-message: always
+spring:
+  cloud:
+    stream:
+      default-binder: rabbit
+
+logging:
+  level:
+    root: INFO
+    com.kimsang: DEBUG
+    org.hibernate.sql: DEBUG

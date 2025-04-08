@@ -36,6 +36,15 @@ dependencies {
 
     implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
 
+    implementation 'org.springdoc:springdoc-openapi-starter-webflux-ui:2.5.0'
+
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.security:spring-security-oauth2-resource-server'
+    implementation 'org.springframework.security:spring-security-oauth2-jose'
+
+    implementation 'org.springframework.cloud:spring-cloud-starter-config'
+    implementation 'org.springframework.retry:spring-retry'
+
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'io.projectreactor:reactor-test'
 
