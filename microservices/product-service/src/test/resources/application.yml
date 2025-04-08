@@ -1,0 +1,8 @@
+server:
+  error:
+    include-message: always
+
+spring:
+  cloud:
+    stream:
+      default-binder: rabbit

@@ -26,7 +26,7 @@ import static org.springframework.http.HttpStatus.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 
 @SpringBootTest(webEnvironment = RANDOM_PORT, properties = {"logging.level.com.kimsang=DEBUG", "eureka.client" +
-    ".enabled=false"})
+    ".enabled=false", "spring.jpa.hibernate.ddl-auto=update", "spring.cloud.config.enabled=false"})
 class ReviewServiceApplicationTests extends MySqlTestBase {
 
   @LocalServerPort

@@ -1,41 +1,25 @@
-spring.application.name: auth-server
-
-server:
-  port: 9999
-  forward-headers-strategy: framework
-
-app:
-  eureka-username: u
-  eureka-password: p
-  eureka-server: localhost
-  issuer-uri: http://localhost:9999
-
-eureka:
-  client:
-    serviceUrl:
-      defaultZone: "http://${app.eureka-username}:${app.eureka-password}@${app.eureka-server}:8761/eureka/"
-    initialInstanceInfoReplicationIntervalSeconds: 5
-    registryFetchIntervalSeconds: 5
-  instance:
-    leaseRenewalIntervalInSeconds: 5
-    leaseExpirationDurationInSeconds: 5
-
-
-logging:
-  level:
-    root: INFO
-management:
-  endpoint:
-    health:
-      show-details: "ALWAYS"
-  endpoints:
-    web:
-      exposure:
-        include: "*"
+spring:
+  config:
+    import: "configserver:"
+  application:
+    name: auth-server
+  cloud:
+    config:
+      fail-fast: true
+      retry:
+        initial-interval: 3000
+        multiplier: 1.3
+        max-interval: 10000
+        max-attempts: 20
+      uri: http://localhost:8888
+      username: ${CONFIG_SERVER_USR}
+      password: ${CONFIG_SERVER_PWD}
 
 ---
-spring.config.activate.on-profile: docker
-
-app:
-  eureka-server: eureka
-  issuer-uri: http://auth-server:9999
+spring:
+  config:
+    activate:
+      on-profile: docker
+  cloud:
+    config:
+      uri: http://config-server:8888

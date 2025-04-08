@@ -1,6 +1,6 @@
 app:
   eureka-username: u
-  eureka-password: '{chipher}bf298f6d5f878b342f9e44bec08cb9ac00b4ce57e98316f030194a225fac89fb'
+  eureka-password: '{cipher}bf298f6d5f878b342f9e44bec08cb9ac00b4ce57e98316f030194a225fac89fb'
   eureka-server: localhost
   auth-server: localhost
 
