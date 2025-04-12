@@ -19,7 +19,11 @@ public interface ProductCompositeService {
       value = "/product-composite/{productId}",
       produces = "application/json"
   )
-  Mono<ProductAggregate> getProduct(@PathVariable int productId);
+  Mono<ProductAggregate> getProduct(
+      @PathVariable int productId,
+      @RequestParam(value = "delay", required = false,
+          defaultValue = "0") int delay,
+      @RequestParam(value = "faultPercent", required = false, defaultValue = "0") int faultPercent);
 
   @ResponseStatus(HttpStatus.ACCEPTED)
   @DeleteMapping(value = "/product-composite/{productId}")

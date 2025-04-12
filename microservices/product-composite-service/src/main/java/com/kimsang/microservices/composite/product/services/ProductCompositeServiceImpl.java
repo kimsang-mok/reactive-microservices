@@ -88,13 +88,7 @@ public class ProductCompositeServiceImpl implements ProductCompositeService {
   }
 
   @Override
-  public Mono<ProductAggregate> getProduct(int productId) {
-
-    if (productId == -1) {
-      LOG.warn("Invalid productId: {}", productId);
-      return Mono.error(new RuntimeException("No product found"));
-    }
-
+  public Mono<ProductAggregate> getProduct(int productId, int delay, int faultPercent) {
     LOG.info("Will get composite product info for product.id: {}", productId);
     return Mono.zip(
             values -> createProductAggregate(
@@ -103,7 +97,7 @@ public class ProductCompositeServiceImpl implements ProductCompositeService {
                 (List<Recommendation>) values[2],
                 (List<Review>) values[3], serviceUtil.getServiceAddress()),
             getSecurityContextMono(),
-            integration.getProduct(productId),
+            integration.getProduct(productId, delay, faultPercent),
             integration.getRecommendations(productId).collectList(),
             integration.getReviews(productId).collectList()
         ).doOnError(ex -> LOG.warn("getCompositeProduct failed: {}", ex.toString()))

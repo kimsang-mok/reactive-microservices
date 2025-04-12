@@ -14,6 +14,7 @@ java {
 }
 ext {
     springCloudVersion = "2023.0.0"
+    resilience4jVersion = "2.1.0"
 }
 
 repositories {
@@ -45,6 +46,10 @@ dependencies {
     implementation 'org.springframework.cloud:spring-cloud-starter-config'
     implementation 'org.springframework.retry:spring-retry'
 
+    implementation 'org.springframework.boot:spring-boot-starter-aop'
+    implementation "io.github.resilience4j:resilience4j-spring-boot3:${resilience4jVersion}"
+    implementation "io.github.resilience4j:resilience4j-reactor:${resilience4jVersion}"
+
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'io.projectreactor:reactor-test'
 
@@ -56,6 +61,20 @@ dependencies {
 dependencyManagement {
     imports {
         mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+    }
+    // to avoid spring cloud overriding the version used with the older version of resilience4j
+    dependencies {
+        dependency "io.github.resilience4j:resilience4j-spring:${resilience4jVersion}"
+        dependency "io.github.resilience4j:resilience4j-annotations:${resilience4jVersion}"
+        dependency "io.github.resilience4j:resilience4j-consumer:${resilience4jVersion}"
+        dependency "io.github.resilience4j:resilience4j-core:${resilience4jVersion}"
+        dependency "io.github.resilience4j:resilience4j-circuitbreaker:${resilience4jVersion}"
+        dependency "io.github.resilience4j:resilience4j-ratelimiter:${resilience4jVersion}"
+        dependency "io.github.resilience4j:resilience4j-retry:${resilience4jVersion}"
+        dependency "io.github.resilience4j:resilience4j-bulkhead:${resilience4jVersion}"
+        dependency "io.github.resilience4j:resilience4j-timelimiter:${resilience4jVersion}"
+        dependency "io.github.resilience4j:resilience4j-micrometer:${resilience4jVersion}"
+        dependency "io.github.resilience4j:resilience4j-circularbuffer:${resilience4jVersion}"
     }
 }
 
