@@ -38,7 +38,8 @@ import static java.util.Collections.singletonList;
     webEnvironment = RANDOM_PORT,
     classes = {TestSecurityConfig.class},
     properties = {"spring.security.oauth2.resourceserver.jwt.issuer-uri=",
-        "spring.main.allow-bean-definition-overriding=true", "eureka.client.enabled=false", "spring.cloud.stream.default-binder=rabbit",
+        "spring.main.allow-bean-definition-overriding=true", "eureka.client.enabled=false", "spring.cloud.stream" +
+        ".default-binder=rabbit",
         "spring.cloud.config.enabled=false"}
 )
 @Import({TestChannelBinderConfiguration.class})
@@ -76,6 +77,7 @@ public class MessagingTests {
 
     // Assert one create recommendation event queued up
     assertEquals(0, recommendationMessages.size());
+    assertEquals(0, reviewMessages.size());
   }
 
   @Test

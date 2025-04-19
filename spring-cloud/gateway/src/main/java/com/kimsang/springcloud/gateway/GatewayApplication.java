@@ -8,6 +8,7 @@ import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Hooks;
 
 @SpringBootApplication
 public class GatewayApplication {
@@ -21,8 +22,8 @@ public class GatewayApplication {
   private static final Logger LOG = LoggerFactory.getLogger(GatewayApplication.class);
 
   public static void main(String[] args) {
+    Hooks.enableAutomaticContextPropagation();
     ConfigurableApplicationContext ctx = SpringApplication.run(GatewayApplication.class, args);
     LOG.info("Eureka server: {}", ctx.getEnvironment().getProperty("app.eureka-server"));
   }
-
 }

@@ -30,6 +30,12 @@ spring.cloud.stream.defaultBinder: rabbit
 management.endpoint.health.show-details: "ALWAYS"
 management.endpoints.web.exposure.include: "*"
 
+management.zipkin.tracing.endpoint: http://zipkin-server:9411/api/v2/spans
+management.tracing.sampling.probability: 1.0
+
+# include the trace and span IDs in the log output
+logging.pattern.level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
+
 ---
 spring.config.activate.on-profile: docker
 
@@ -55,6 +61,5 @@ spring:
 
   kafka:
     bootstrap-servers: kafka:9092
-
 
 stream.kafka.binder.replication-factor: 1

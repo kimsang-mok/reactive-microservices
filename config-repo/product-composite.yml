@@ -101,8 +101,11 @@ resilience4j.circuitbreaker:
 logging:
   level:
     root: INFO
-    com.kimsang: DEBUG
-    org.springframework.web.server.adapter.HttpWebHandlerAdapter: TRACE
+    com.kimsang: INFO
+    org.springframework.web.server.adapter.HttpWebHandlerAdapter: INFO
+    # To see tracing headers, uncomment the following two lines and restart the product-composite service
+    # spring.codec.log-request-details: true
+    # logging.level.org.springframework.web.reactive.function.client.ExchangeFunctions: TRACE
 
 ---
 spring:

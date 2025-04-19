@@ -60,6 +60,8 @@ public class ProductServiceImpl implements ProductService {
       throw new InvalidInputException("Invalid productId: " + productId);
     }
 
+    LOG.info("Will get product info for id: {}", productId);
+
     return repository.findByProductId(productId)
         .map(e -> throwErrorIfBadLuck(e, faultPercent))
         .delayElement(Duration.ofSeconds(delay))

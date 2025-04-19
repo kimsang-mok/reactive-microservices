@@ -145,3 +145,11 @@ services:
     volumes:
       - $PWD/config-repo:/config-repo
 
+  zipkin-server:
+    image: openzipkin/zipkin:3.4.4
+    restart: always
+    mem_limit: 1024m
+    environment:
+      - STORAGE_TYPE=mem
+    ports:
+      - 9411:9411

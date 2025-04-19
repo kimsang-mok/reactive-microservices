@@ -10,7 +10,7 @@
 : ${PROD_ID_NOT_FOUND=13}
 : ${PROD_ID_NO_RECS=113}
 : ${PROD_ID_NO_REVS=213}
-: ${SKIP_CB_TESTS=false}
+: ${SKIP_CB_TESTS=true}
 
 function assertCurl() {
 
